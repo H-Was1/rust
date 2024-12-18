@@ -1,11 +1,16 @@
+use std::io::Read;
+
 fn main() {
-    let user_name = String::from("user");
+    let file = "my.txt".to_owned();
+    let data = read_file(&file).ok();
+    if let Some(data) = data {
+        println!("{}", data);
+    }
 }
 
-fn get_user_id(user_name: &str) -> Result<u32, String> {
-    if user_name.is_empty() {
-        return Err("User name is empty".to_string());
-    }
-
-    Ok(20)
+fn read_file(file_name: &str) -> Result<String, std::io::Error> {
+    let mut file = std::fs::File::open(file_name)?;
+    let mut contents = String::new();
+    file.read_to_string(&mut contents)?;
+    Ok(contents)
 }

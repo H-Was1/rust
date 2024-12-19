@@ -1,16 +1,13 @@
-use std::io::Read;
-
 fn main() {
     let file = "my.txt".to_owned();
-    let data = read_file(&file).ok();
+    let data = read_file(&file);
     if let Some(data) = data {
         println!("{}", data);
     }
 }
 
-fn read_file(file_name: &str) -> Result<String, std::io::Error> {
-    let mut file = std::fs::File::open(file_name)?;
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)?;
-    Ok(contents)
+fn read_file(file_name: &str) -> Option<String> {
+    std::fs::read_to_string(file_name)
+        .ok()
+        .and_then(|s| s.lines().next().map(|l| l.to_owned()))
 }
